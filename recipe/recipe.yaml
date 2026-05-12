@@ -32,9 +32,14 @@ requirements:
     - pkg-config
     - python ${{ python_min }}.*
   host:
+    - if: osx
+      then: llvm-openmp
+    - if: linux
+      then: libgomp
     - fftw
     - libblas
     - liblapack
+    - parmetis
     - ${{ mpi }}
     - petsc
     - zlib
