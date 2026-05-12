@@ -2,6 +2,9 @@
 set -exuo pipefail
 
 export OPENCARP_DIR="$PREFIX"
+# cmake references `cpp` instead of $CPP, make it work without needing a patch
+ln -s $CPP $BUILD_PREFIX/bin/cpp
+
 cmake -S ${SRC_DIR} -B _build \
   ${CMAKE_ARGS} \
   -DDLOPEN=ON

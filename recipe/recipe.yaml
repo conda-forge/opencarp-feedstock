@@ -13,8 +13,8 @@ source:
   url: https://git.opencarp.org/openCARP/openCARP/-/archive/v${{ version_xy }}/openCARP-v${{ version_xy }}.tar.bz2
   sha256: bac9780393b3ce204a7bda39bc1c06976707ec145c27f16c99720fbe62c29a6d
   patches:
-    - cpp-env.patch
-    - build_info.patch
+    # MR 443, petsc 3.25 compatibility
+    - 443.patch
 
 build:
   number: ${{ build }}
