@@ -1,0 +1,50 @@
+From 8d9ad259621a1c5fe067429f0df5b42c927b32f0 Mon Sep 17 00:00:00 2001
+From: Marie Houillon <marie.houillon@kit.edu>
+Date: Wed, 8 Apr 2026 14:37:14 +0200
+Subject: [PATCH 1/2] Compatibility with signature change in PETSc 3.25
+
+---
+ numerics/petsc/SF_petsc_matrix.h | 2 +-
+ numerics/petsc/petsc_compat.h    | 7 +++++++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/numerics/petsc/SF_petsc_matrix.h b/numerics/petsc/SF_petsc_matrix.h
+index b082164de..abcf7a208 100644
+--- a/numerics/petsc/SF_petsc_matrix.h
++++ b/numerics/petsc/SF_petsc_matrix.h
+@@ -154,7 +154,7 @@ class petsc_matrix : public abstract_matrix<SF_int,SF_real>
+     if(err)
+     {
+       const char* text = nullptr;
+-      char* specific = nullptr;
++      COMPAT_PetscErrorMessage_CONST_CHAR* specific = nullptr;
+       PetscErrorMessage(err, &text, &specific);
+       std::cout << " MatSetValues error code=" << err
+                 << " text=" << (text ? text : "(null)")
+diff --git a/numerics/petsc/petsc_compat.h b/numerics/petsc/petsc_compat.h
+index 83418b901..f991e6f62 100644
+--- a/numerics/petsc/petsc_compat.h
++++ b/numerics/petsc/petsc_compat.h
+@@ -120,6 +120,8 @@ PETSc.
+ #define COMPAT_PetscOptionsInsertString(a) PetscOptionsInsertString(a)
+ #define COMPAT_PETSC_NULLPTR PETSC_NULL
+ #define COMPAT_CONST_CHAR char
++// In PETSc 3.25, the third argument of PetscErrorMessage() changed from char** to const char**.
++#define COMPAT_PetscErrorMessage_CONST_CHAR char
+ 
+ #if PETSC_VERSION >= 203200
+ #undef COMPAT_PCFactorSetFill
+@@ -276,6 +278,11 @@ PETSc.
+ #define COMPAT_CONST_CHAR const char
+ #endif
+ 
++#if PETSC_VERSION >= 325000
++#undef COMPAT_PetscErrorMessage_CONST_CHAR
++#define COMPAT_PetscErrorMessage_CONST_CHAR const char
++#endif
++
+ //// HEADER GUARD ///////////////////////////
+ #endif
+ //// HEADER GUARD ///////////////////////////
+-- 
+GitLab
